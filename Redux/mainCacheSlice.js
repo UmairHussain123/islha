@@ -1,8 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
 import moment from "moment";
 const initialState = {
-  pFundData: null,
-  pFundUpdateDateTime: null,
+  namzData: null,
+  namzUpdateDateTime: null,
 };
 
 export const mainCacheSlice = createSlice({
@@ -12,22 +12,22 @@ export const mainCacheSlice = createSlice({
     reset: (state, action) => {
       Object.assign(state, initialState);
     },
-    // updatePFundData: (state, action) => {
-    //   state.pFundData = action.payload ? action.payload : "";
-    //   var currentTime = Date.now();
-    //   state.pFundUpdateDateTime = moment(Date.now()).format(
-    //     "YYYY-MMM-DD HH:mm:ss"
-    //   );
-    //   console.log(state);
-    // },
-    // updatePFundUpdateDateTime: (state, action) => {
-    //   var currentTime = new Date.now();
-    //   state.pFundUpdateDateTime = currentTime.toString();
-    // },
+    updateNamzData: (state, action) => {
+      state.namzData = action.payload ? action.payload : "";
+      var currentTime = Date.now();
+      state.namzUpdateDateTime = moment(Date.now()).format(
+        "YYYY-MMM-DD HH:mm:ss"
+      );
+      console.log(state);
+    },
+    updateNamzUpdateDateTime: (state, action) => {
+      var currentTime = new Date.now();
+      state.namzUpdateDateTime = currentTime.toString();
+    },
   },
 });
 
-export const { reset, updatePFundData, updatePFundUpdateDateTime } =
+export const { reset, updateNamzData, updateNamzUpdateDateTime } =
   mainCacheSlice.actions;
 
 export default mainCacheSlice.reducer;
