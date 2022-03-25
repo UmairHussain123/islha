@@ -1,4 +1,12 @@
-import { StyleSheet, Text, View, Dimensions, ScrollView } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  ActivityIndicator,
+  Dimensions,
+  ScrollView,
+  TouchableOpacity,
+} from "react-native";
 import React, { useState, useEffect } from "react";
 import { Avatar, Button, Card, Title, Paragraph } from "react-native-paper";
 import moment from "moment";
@@ -9,7 +17,10 @@ import { shouldUpdateCache } from "../helper/CacheHelper";
 import { useSelector, useDispatch } from "react-redux";
 
 import { updateNamzData } from "../Redux/mainCacheSlice";
-const MainScreen = () => {
+
+import Route from "../Constants/NavigationStrings";
+
+const MainScreen = ({ navigation }) => {
   const [location, setLocation] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
   const [address, setAddress] = useState(null);
@@ -61,17 +72,18 @@ const MainScreen = () => {
     };
 
     fetch(
-      `https://api.pray.zone/v2/times/this_month.json?city=${address.city}&timeformat=1`,
+      `https://api.pray.zone/v2/times/dates.json?city=${address.city}&start=2022-03-25&end=2022-03-25&&timeformat=1`,
       requestOptions
     )
       .then((response) => response.text())
       .then((result) => {
-        dispatch(updateNamzData(JSON.parse(result)));
+        var data1 = JSON.parse(result);
+        dispatch(updateNamzData(data1));
 
         // now we need to get data from cache
         setLoadingFromServer(false);
         setLoadingFromCache(true);
-        console.log("JSON.parse(result).results.datetime", JSON.parse(result));
+        // console.log("JSON.parse(result).results.datetime", JSON.parse(result));
       })
       .catch((error) => console.log("error", error));
   };
@@ -95,13 +107,13 @@ const MainScreen = () => {
         "PFundData",
         mainCache.namzData,
         mainCache.namzUpdateDateTime,
-        5,
+        1,
         true
       ).then((x) => {
-        console.log("response is", x);
+        // console.log("response is", x);
         // if cache is not old (based on number of minutes)
         if (x[0] == !true) {
-          console.log("ShouldUpdateNamzData", x);
+          // console.log("ShouldUpdateNamzData", x);
           // Alert.alert("Message", "Schedule Meetings are Loaded from chache");
           console.log("fetching from DB");
           setLoadingFromCache(true);
@@ -119,70 +131,76 @@ const MainScreen = () => {
   useEffect(() => {
     if (loadingFromCache) {
       console.log("loadingFromCache");
-      console.log("mainCache.namzData", mainCache.namzData.results.datetime);
-      setNamzData(mainCache.namzData.results.datetime);
+      // console.log("mainCache.namzData", mainCache.namzData.results.datetime);
+      setNamzData(mainCache.namzData.results);
       setLoadingFromCache(false);
       console.log("namzData", namzData);
     }
-  }, [loadingFromCache, namzData]);
-
-  // useEffect(() => {
-  //   if (namzData !== null) {
-  //     const today = namzData.filter((todayData) => {
-  //       return (mainCache.namzData.results.datetime[0].date.gregorian = moment(
-  //         Date.now()
-  //       ).format("YYYY-MMM-DD"));
-  //     });
-  //   }
-
-  // getApiData();
-  // }, [namzData]);
-
+  }, [loadingFromCache]);
+  // .datetime[0].times.Asr
+  var datas = namzData && namzData.datetime[0].times.Asr;
+  console.log("console.log(namzData", datas);
   return (
     <View style={styles.mainView}>
-      <ScrollView>
-        <Card style={styles.cardStyle}>
-          <Card.Title
-            title="Namz Time"
-            subtitle={
-              address &&
-              address.country +
-                "  " +
-                address.city +
-                "      " +
-                moment(Date.now()).format("YYYY-MMM-DD")
-            }
-          />
-          {/* <Title>Card title</Title> */}
+      {loadingFromCache || loadingFromServer || namzData == null ? (
+        <ActivityIndicator
+          size="large"
+          color="#006e51"
+          style={{ marginTop: "50%" }}
+        />
+      ) : (
+        <ScrollView>
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate(Route.NamzTime);
+            }}
+          >
+            <Card style={styles.cardStyle}>
+              <Card.Title
+                title="Namz Time"
+                subtitle={
+                  address &&
+                  address.country +
+                    "  " +
+                    address.city +
+                    "      " +
+                    moment(Date.now()).format("YYYY-MMM-DD")
+                }
+              />
+              {/* <Title>Card title</Title> */}
 
-          <Card.Content>
-            <Paragraph>{}</Paragraph>
-          </Card.Content>
-          <Card.Cover source={require("../assets/image/musq.jpg")} />
-          <Card.Actions></Card.Actions>
-        </Card>
-        <Card style={styles.cardStyle}>
-          <View style={{}}>
-            <Card.Title
-              title="Ramadan Timing"
-              subtitle={
-                address &&
-                address.country +
-                  "  " +
-                  address.city +
-                  "      " +
-                  moment(Date.now()).format("YYYY-MMM-DD")
-              }
-            />
-            {/* <Title>Card title</Title> */}
-          </View>
-          <Card.Content>
-            {/* <Paragraph>Card content</Paragraph> */}
-          </Card.Content>
-          <Card.Cover source={require("../assets/image/roza1.jpg")} />
-          <Card.Actions></Card.Actions>
-        </Card>
-      </ScrollView>
+              <Card.Content>
+                {/* <Paragraph>
+                Fajr: {namzData && namzData.datetime[0].times.Fajr}
+              </Paragraph> */}
+              </Card.Content>
+              <Card.Cover source={require("../assets/image/musq.jpg")} />
+              <Card.Actions></Card.Actions>
+            </Card>
+          </TouchableOpacity>
+          <Card style={styles.cardStyle}>
+            <View style={{}}>
+              <Card.Title
+                title="Ramadan Timing"
+                subtitle={
+                  address &&
+                  address.country +
+                    "  " +
+                    address.city +
+                    "      " +
+                    moment(Date.now()).format("YYYY-MMM-DD")
+                }
+              />
+              {/* <Title>Card title</Title> */}
+            </View>
+            <Card.Content>
+              {/* <Paragraph>Card content</Paragraph> */}
+            </Card.Content>
+            <Card.Cover source={require("../assets/image/roza1.jpg")} />
+            <Card.Actions></Card.Actions>
+          </Card>
+        </ScrollView>
+      )}
     </View>
   );
 };
