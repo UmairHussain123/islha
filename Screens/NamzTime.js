@@ -36,10 +36,8 @@ const NamzTime = () => {
         ) : (
           mainCacheToday.map((item, index) => {
             if (item.date.gregorian == date1) {
-              // setGetDataToday(item);
               return (
                 <View key={index}>
-                  {/* <Text>Hijri </Text> <Text>{item.date.hijri} </Text> */}
                   <View
                     style={{
                       margin: 5,
@@ -138,26 +136,7 @@ const NamzTime = () => {
                       {/* <Paragraph>Card content</Paragraph> */}
                     </Card.Content>
                   </Card>
-                  <Card
-                    style={{
-                      backgroundColor: "#006cbe",
-                      borderRadius: 20,
-                      marginTop: 20,
-                    }}
-                  >
-                    <Card.Content
-                      style={{
-                        flexDirection: "row",
-                        justifyContent: "space-between",
-                      }}
-                    >
-                      <Title style={styles.tilesColor}>Sunset</Title>
-                      <Title style={styles.tilesColor}>
-                        {item.times.Sunset}
-                      </Title>
-                      {/* <Paragraph>Card content</Paragraph> */}
-                    </Card.Content>
-                  </Card>
+
                   <Card
                     style={{
                       backgroundColor: "#006cbe",
@@ -193,6 +172,26 @@ const NamzTime = () => {
                     >
                       <Title style={styles.tilesColor}>Asr</Title>
                       <Title style={styles.tilesColor}>{item.times.Asr}</Title>
+                      {/* <Paragraph>Card content</Paragraph> */}
+                    </Card.Content>
+                  </Card>
+                  <Card
+                    style={{
+                      backgroundColor: "#006cbe",
+                      borderRadius: 20,
+                      marginTop: 20,
+                    }}
+                  >
+                    <Card.Content
+                      style={{
+                        flexDirection: "row",
+                        justifyContent: "space-between",
+                      }}
+                    >
+                      <Title style={styles.tilesColor}>Sunset</Title>
+                      <Title style={styles.tilesColor}>
+                        {item.times.Sunset}
+                      </Title>
                       {/* <Paragraph>Card content</Paragraph> */}
                     </Card.Content>
                   </Card>

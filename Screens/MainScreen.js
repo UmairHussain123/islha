@@ -72,7 +72,7 @@ const MainScreen = ({ navigation }) => {
     };
 
     fetch(
-      `https://api.pray.zone/v2/times/this_month.json?city=${address.city}&start=2022-03-27&end=2022-03-27&&timeformat=1`,
+      `https://api.pray.zone/v2/times/this_month.json?city=${address.city}&school=1&juristic=1&timeformat=1`,
       requestOptions
     )
       .then((response) => response.text())
@@ -178,27 +178,33 @@ const MainScreen = ({ navigation }) => {
               <Card.Actions></Card.Actions>
             </Card>
           </TouchableOpacity>
-          <Card style={styles.cardStyle}>
-            <View style={{}}>
-              <Card.Title
-                title="Ramadan Timing"
-                subtitle={
-                  address &&
-                  address.country +
-                    "  " +
-                    address.city +
-                    "      " +
-                    moment(Date.now()).format("YYYY-MMM-DD")
-                }
-              />
-              {/* <Title>Card title</Title> */}
-            </View>
-            <Card.Content>
-              {/* <Paragraph>Card content</Paragraph> */}
-            </Card.Content>
-            <Card.Cover source={require("../assets/image/roza1.jpg")} />
-            <Card.Actions></Card.Actions>
-          </Card>
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate(Route.RozaTime);
+            }}
+          >
+            <Card style={styles.cardStyle}>
+              <View style={{}}>
+                <Card.Title
+                  title="Ramadan Timing"
+                  subtitle={
+                    address &&
+                    address.country +
+                      "  " +
+                      address.city +
+                      "      " +
+                      moment(Date.now()).format("YYYY-MMM-DD")
+                  }
+                />
+                {/* <Title>Card title</Title> */}
+              </View>
+              <Card.Content>
+                {/* <Paragraph>Card content</Paragraph> */}
+              </Card.Content>
+              <Card.Cover source={require("../assets/image/roza1.jpg")} />
+              <Card.Actions></Card.Actions>
+            </Card>
+          </TouchableOpacity>
         </ScrollView>
       )}
     </View>
