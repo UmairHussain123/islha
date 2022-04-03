@@ -72,7 +72,7 @@ const MainScreen = ({ navigation }) => {
     };
 
     fetch(
-      `https://api.pray.zone/v2/times/dates.json?city=${address.city}&start=2022-03-25&end=2022-03-25&&timeformat=1`,
+      `https://api.pray.zone/v2/times/this_month.json?city=${address.city}&start=2022-03-27&end=2022-03-27&&timeformat=1`,
       requestOptions
     )
       .then((response) => response.text())
