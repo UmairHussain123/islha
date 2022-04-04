@@ -15,7 +15,7 @@ import * as Location from "expo-location";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { shouldUpdateCache } from "../helper/CacheHelper";
 import { useSelector, useDispatch } from "react-redux";
-
+import * as Linking from "expo-linking";
 import { updateNamzData } from "../Redux/mainCacheSlice";
 
 import Route from "../Constants/NavigationStrings";
@@ -107,7 +107,7 @@ const MainScreen = ({ navigation }) => {
         "PFundData",
         mainCache.namzData,
         mainCache.namzUpdateDateTime,
-        1,
+        100,
         true
       ).then((x) => {
         // console.log("response is", x);
@@ -140,6 +140,10 @@ const MainScreen = ({ navigation }) => {
   // .datetime[0].times.Asr
   var datas = namzData && namzData.datetime[0].times.Asr;
   console.log("console.log(namzData", datas);
+
+  const handleOpenWithLinking = () => {
+    Linking.openURL("https://downloadthequran.com/download-pdf-arabic-quran/");
+  };
   return (
     <View style={styles.mainView}>
       {loadingFromCache || loadingFromServer || namzData == null ? (
@@ -202,6 +206,33 @@ const MainScreen = ({ navigation }) => {
                 {/* <Paragraph>Card content</Paragraph> */}
               </Card.Content>
               <Card.Cover source={require("../assets/image/roza1.jpg")} />
+              <Card.Actions></Card.Actions>
+            </Card>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => {
+              handleOpenWithLinking();
+            }}
+          >
+            <Card style={styles.cardStyle}>
+              <View style={{}}>
+                <Card.Title
+                  title="Download Holy Quran"
+                  subtitle={
+                    address &&
+                    address.country +
+                      "  " +
+                      address.city +
+                      "      " +
+                      moment(Date.now()).format("YYYY-MMM-DD")
+                  }
+                />
+                {/* <Title>Card title</Title> */}
+              </View>
+              <Card.Content>
+                {/* <Paragraph>Card content</Paragraph> */}
+              </Card.Content>
+              <Card.Cover source={require("../assets/image/quran.jpg")} />
               <Card.Actions></Card.Actions>
             </Card>
           </TouchableOpacity>
